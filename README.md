@@ -6,7 +6,7 @@ A small, personal, browser-based player for Plex playlists. It lists your playli
 
 ---
 
-## How it works
+## How it works ([https://www.brandtbridges.com/music](https://www.brandtbridges.com/music?playlist=62899))
 
 ### High‑level flow
 1. **Bootstrap**
