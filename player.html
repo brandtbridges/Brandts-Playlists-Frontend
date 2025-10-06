@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Brandt's Playlists</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/player.css?v=20251005m">  
+</head>
+<body>
+  <!-- Blocking overlay (visible by default) -->
+  <div id="blocker" class="blocker" aria-live="polite" aria-busy="true" aria-label="Loading">
+    <div class="loader">
+        <div class="spinner" aria-hidden="true"></div>
+        <div id="blockerLabel" class="label">Loading playlists…</div>
+    </div>
+  </div>
+  
+  <header class="app-header">
+    <h1>Brandt's Playlists</h1>
+
+    <!-- NEW: playlist dropdown -->
+    <div class="header-controls">
+        <label for="playlistSelect" class="sr-only">Playlist</label>
+        <select id="playlistSelect" name="playlistSelect" aria-label="Playlist"></select>
+    </div>
+  </header>
+  <main class="wrap">
+    <!-- Status banner (errors, loading, etc.) -->
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+
+    <!-- Centered media panel (art + controls) @ 320px -->
+    <section class="media-panel" aria-label="Media panel">
+      
+    <div class="art">
+    <img id="cover" alt="Album art" />
+    <canvas id="vizCanvas" class="viz-canvas" hidden aria-label="Audio visualizer"></canvas>
+    </div>
+
+    <!-- Timeline row: [elapsed] [progress bar with handle] [remaining] -->
+    <div class="timeline" aria-label="Playback timeline">
+    <div id="timeElapsed"   class="time time--elapsed">0:00</div>
+    <div class="scrub">
+        <div class="scrub__track" id="scrubTrack">
+        <div class="scrub__buffer" id="scrubBuffer"></div>
+        <div class="scrub__played" id="scrubPlayed"></div>
+        <div class="scrub__handle"
+            id="scrubHandle"
+            role="slider"
+            tabindex="0"
+            aria-label="Seek"
+            aria-valuemin="0"
+            aria-valuemax="0"
+            aria-valuenow="0"></div>
+        </div>
+    </div>
+    <div id="timeRemaining" class="time time--remaining">-0:00</div>
+    </div>
+
+    <div class="controls" role="group" aria-label="Playback controls">
+        <button id="prevBtn"      class="icon-btn icon--prev"        type="button" aria-label="Previous"></button>
+        <button id="playPauseBtn" class="icon-btn icon--play"        type="button" aria-label="Play" aria-pressed="false"></button>
+        <button id="nextBtn"      class="icon-btn icon--next"        type="button" aria-label="Next"></button>
+        <button id="shuffleBtn"   class="icon-btn icon--shuffle-off" type="button" aria-label="Shuffle" aria-pressed="false"></button>
+    </div>
+    </section>
+
+    <!-- Full-width now-playing (under controls, above playlist) -->
+    <div id="now" class="now" style="display:none;"></div>
+
+    <!-- Full-width playlist -->
+    <div id="list" class="list" role="list" aria-label="Playlist"></div>
+
+    <!-- Audio element -->
+    <audio id="audio" preload="none" controls></audio>
+
+    <footer class="app-footer">
+      <div>Space play/pause • ←/→ prev/next</div>
+      <div>v1.6</div>
+    </footer>
+  </main>
+
+  <!-- Script -->
+  <script src="/js/player.js?v=20251005o"></script> 
+</body>
+</html>

@@ -1,0 +1,481 @@
+/* ================================
+   THEME + TOKENS
+   ================================ */
+:root{
+  --bg:#0f1115; --panel:#151922; --text:#e6e8ee; --muted:#a7adbb;
+  --accent:#5aa7ff; --accent2:#7bd389; --border:#232838;
+  --media-width:320px;      /* art + controls width */
+  --icon-size:32px;         /* PNG icon render size (background-size) */
+}
+
+/* ================================
+   PAGE FRAME
+   ================================ */
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+}
+.app-header{
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; background:var(--panel); border-bottom:1px solid var(--border);
+}
+.app-header h1{ font-size:18px; margin:0; font-weight:600; }
+.badge{ color:var(--muted); font-size:12px; }
+.badge2{ color:#D58229; font-size:16px; }
+
+/* Keep header content spaced (H1 on the left, selector on the right) */
+.app-header { justify-content: space-between; }
+
+/* Screen-reader-only label helper */
+.sr-only {
+  position: absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Header controls (the dropdown) */
+.header-controls select {
+  appearance: none;               /* optional, for consistent look */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: var(--panel) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='10'><path fill='%23a7adbb' d='M1 1l6 6 6-6'/></svg>") no-repeat right 10px center / 14px 10px;
+  color: #D58229 !important; /*var(--text);*/
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 34px 8px 10px;     /* leave room for the caret */
+  font: inherit;
+  cursor: pointer;
+}
+
+.header-controls select:hover,
+.header-controls select:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+  color: #D58229 !important;
+}
+
+/* Main content wrapper (playlist area is full width inside this) */
+.wrap{
+  display:grid; grid-template-rows:auto auto auto 1fr auto;
+  gap:12px; max-width:960px; margin:0 auto; padding:12px 16px 24px;
+}
+
+.status{
+  display:none; padding:10px 12px; border-radius:6px;
+  border:1px solid var(--border); background:#1d2433; color:var(--text);
+}
+.status.show{ display:block; }
+.status.error{ border-color:#5d2323; background:#2a1c1c; color:#ffd9d9; }
+
+/* ================================
+   MEDIA PANEL (ART + CONTROLS)
+   ================================ */
+.media-panel{
+  width:var(--media-width); margin:0 auto; display:grid; row-gap:8px;
+}
+
+/* Cover image: always block (placeholder visible by default to prevent layout shift) */
+.art img#cover{
+  display:block; width:100%; max-width:var(--media-width);
+  border-radius:12px; border:1px solid var(--border); background:#1a2030;
+  transition: opacity .15s ease-in-out;
+}
+.art img#cover.is-loading{ opacity:.6; }
+
+.art img#cover.placeholder {
+  border-color: rgba(213,130,41,0.6); /* distinct color for default image */
+}
+
+/* Controls row: 320px centered, icons as backgrounds */
+.controls{
+  width:var(--media-width); margin:0 auto;
+  display:grid; grid-auto-flow:column; justify-content:center; align-items:center;
+  gap:12px; padding:6px 0;
+}
+
+/* Base control button styles */
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel) center/var(--icon-size) no-repeat;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: none; /* no hover transitions */
+}
+
+/* Remove hover/focus/active highlights for all buttons */
+.icon-btn:hover,
+.icon-btn:focus-visible,
+.icon-btn:active {
+  border-color: var(--border);
+  box-shadow: none;
+  outline: none;
+}
+
+/* Shuffle toggle ONLY: pressed state highlight */
+.icon-btn.icon--shuffle-off[aria-pressed="true"],
+.icon-btn.icon--shuffle-on[aria-pressed="true"] {
+  border-color: #D58229;
+  box-shadow: 0 0 0 2px rgba(123,211,137,.15) inset;
+}
+
+/* Icon state → background-image (update paths if needed) */
+.icon--prev        { background-image:url("/assets/icons/icon-prev.png"); }
+.icon--next        { background-image:url("/assets/icons/icon-next.png"); }
+.icon--play        { background-image:url("/assets/icons/icon-play.png"); }
+.icon--pause       { background-image:url("/assets/icons/icon-pause.png"); }
+.icon--shuffle-off { background-image:url("/assets/icons/icon-shuffle.png"); }
+.icon--shuffle-on  { background-image:url("/assets/icons/icon-shuffle.png"); }
+
+/* ================================
+   NOW PLAYING + PLAYLIST (FULL WIDTH)
+   ================================ */
+.now{
+  max-width:100%; margin:8px 0; padding:8px 10px; border-radius:6px;
+  background:#142137; border:1px solid #18345c; color:#cfe3ff;
+}
+
+.list{
+  border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--panel);
+}
+.row{
+  display:grid; grid-template-columns:1fr auto; gap:12px;
+  padding:10px 12px; border-bottom:1px solid var(--border); cursor:pointer;
+}
+.row:hover{ background:#1a2030; }
+.row:last-child{ border-bottom:0; }
+.title{ font-weight:600; }
+.meta{ color:var(--muted); font-size:12px; }
+.active{ background:#162134; }
+
+.app-footer{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; color:var(--muted); font-size:12px;
+}
+
+/* ======= BLOCKING OVERLAY ======= */
+
+.blocker {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 17, 21, 0.85); /* #0F1115 with 85% opacity */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity 0.20s ease;
+}
+
+.blocker.hidden{ opacity:0; pointer-events:none; }
+
+.loader{ 
+  display:grid; gap:12px; justify-items:center;
+  padding:18px 20px; border-radius:10px;
+  background: rgba(21,25,34,0.55);
+  border:1px solid var(--border);
+  color: var(--text);
+}
+
+.spinner{
+  width:48px; height:48px;
+  border:3px solid rgba(230,232,238,.25);
+  border-top-color: var(--accent);
+  border-radius:50%;
+  animation: spin .9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loader .label{
+  font-size:14px; color: var(--muted);
+}
+
+/* Reduced motion: stop spinner rotation */
+@media (prefers-reduced-motion: reduce){
+  .spinner{ animation: none; }
+
+
+/* ======= VISUALIZER (full width × 320px) ======= */
+.visualizer[hidden] { display: none !important; }
+.visualizer {
+  width: 100%;
+  height: 320px;
+  background: #0f1115;              /* page bg */
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  grid-template-rows: 1fr auto;     /* canvas + caption */
+  overflow: clip;
+}
+.visualizer canvas {
+  width: 100%;
+  height: 100%;
+  display: block;                    /* no inline gap */
+}
+.viz-caption {
+  user-select: none;
+  padding: 6px 10px;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  background: rgba(21,25,34,0.6);
+}
+
+/* Small polish when visualizer is shown (optional) */
+.app-header { position: relative; z-index: 2; }}
+
+/* Art slot behaves like a fixed-height stage for either cover OR visualizer */
+.art {
+  position: relative;
+  width: var(--media-width);          /* 320px */
+  height: var(--media-width);         /* 320px fixed height so layout never shifts */
+  margin: 0 auto;                     /* centered (matches your current art) */
+}
+
+/* Cover image as before (already in your CSS); repeated here for clarity */
+.art img#cover {
+  display: block;
+  width: 100%;
+  max-width: var(--media-width);
+  height: 100%;                       /* ensure it fills the 320px stage */
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border, #232838);
+  background: #1a2030;
+  transition: opacity .15s ease-in-out;
+}
+
+/* Visualizer canvas overlays the art slot and is centered.
+   Width is set by JS to the page content width; height stays 320px via the stage. */
+.art canvas.viz-canvas[hidden] { display: none !important; }
+
+.art canvas.viz-canvas {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);  /* center horizontally */
+  /* width is set dynamically in JS to match content container width */
+  height: 100%;                  /* same 320px as the art stage */
+  display: block;
+  background: #0f1115;           /* page bg for clean edges */
+  border-radius: 8px;            /* match art corners */
+}
+
+
+/* Visualizer canvas: page-colored background + same border as cover art */
+.art canvas.viz-canvas {
+  background: rgba(15, 17, 21, 1);          /* #0F1115 */
+  border: 1px solid var(--border, #232838);  /* match cover art border */
+  border-radius: 8px;                        /* match cover corners */
+  z-index: 1;                                /* sit above (hidden) cover */
+}
+
+
+
+/* Optional: slight inner glow for depth */
+.art canvas.viz-canvas {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2) inset;
+}
+
+/* --- Base: remove UA/tap artifacts without altering visuals --- */
+.icon-btn {
+  -webkit-tap-highlight-color: transparent; /* Android/iOS tap flash */
+  -webkit-appearance: none;
+  appearance: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Non-shuffle controls: neutralize state without killing the icon image */
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):hover,
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):active,
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):focus,
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):focus-visible {
+  /* IMPORTANT: use background-color, not background */
+  background-color: var(--panel) !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* Phones/tablets: ensure no :active tint on tap for non-shuffle */
+@media (pointer: coarse) {
+  .icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):active {
+    background-color: var(--panel) !important; /* not 'background' */
+  }
+}
+
+/* Shuffle stays exactly as-is (pressed accent preserved) */
+.icon-btn.icon--shuffle-off[aria-pressed="true"],
+.icon-btn.icon--shuffle-on[aria-pressed="true"] {
+  border-color: #D58229  !important;
+  box-shadow: 0 0 0 2px rgba(123,211,137,.15) inset !important;
+}
+
+/* Optional: keep shuffle hover neutral; remove if you want a hover effect */
+.icon-btn.icon--shuffle-off:hover,
+.icon-btn.icon--shuffle-on:hover {
+  border-color: var(--border) !important;
+}
+
+/* --- Ensure SHUFFLE shows accent immediately on tap (Android) --- */
+/* Apply accent when pressed, focused, or actively being tapped */
+.icon-btn.icon--shuffle-on[aria-pressed="true"],
+.icon-btn.icon--shuffle-off[aria-pressed="true"],
+.icon-btn.icon--shuffle-on:active,
+.icon-btn.icon--shuffle-off:active,
+.icon-btn.icon--shuffle-on:focus,
+.icon-btn.icon--shuffle-off:focus,
+.icon-btn.icon--shuffle-on:focus-visible,
+.icon-btn.icon--shuffle-off:focus-visible {
+  border-color: #D58229 !important;
+  box-shadow: 0 0 0 2px rgba(123,211,137,.15) inset !important;
+}
+
+/* IMPORTANT: For non-shuffle controls, keep the neutral states but
+   do NOT use 'background' shorthand—use background-color so icons stay visible */
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):hover,
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):active,
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):focus,
+.icon-btn:not(.icon--shuffle-on):not(.icon--shuffle-off):focus-visible {
+  background-color: var(--panel) !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* If you previously added a shuffle hover neutralizer, remove it or override it.
+   (It would override the accent on desktop hover.) 
+ .icon-btn.icon--shuffle-off:hover,
+ .icon-btn.icon--shuffle-on:hover {
+   border-color: var(--border) !important;
+ }
+*/
+
+/* Playlist select: keep default border & background in ALL states */
+#playlistSelect {
+  border: 1px solid var(--border);           /* your default border */
+  background-color: var(--panel);            /* match control panel bg */
+  color: var(--text);
+  border-radius: 8px;                        /* match your control radius */
+  -webkit-tap-highlight-color: transparent;  /* Android/iOS tap flash */
+  outline: none;                             
+}
+
+/* Neutralize hover/active/focus/keyboard focus visuals */
+#playlistSelect:hover,
+#playlistSelect:active,
+#playlistSelect:focus,
+#playlistSelect:focus-visible {
+  border-color: var(--border) !important;
+  background-color: var(--panel) !important;
+  box-shadow: none !important;               /* kills Chrome/Edge focus ring */
+  outline: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* Touch devices: ensure :active doesn't tint */
+@media (pointer: coarse) {
+  #playlistSelect:active {
+    background-color: var(--panel) !important;
+  }
+}
+
+/* If you happen to style .header-controls select elsewhere, pin this too */
+.header-controls > #playlistSelect {
+  border-color: var(--border) !important;
+  background-color: var(--panel) !important;
+}
+
+/* ===== Timeline layout: 3 columns (elapsed | bar | remaining) ===== */
+.timeline {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0 12px 0;
+}
+
+.time {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* ===== Scrub bar ===== */
+.scrub { display: block; }
+.scrub__track {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);              /* base track */
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  /* Touch dragging */
+  touch-action: none;
+}
+
+/* Buffered portion (behind played) */
+.scrub__buffer {
+  position: absolute; inset: 0 auto 0 0;
+  width: 0%;
+  background: rgba(255,255,255,0.12);
+}
+
+/* Played portion */
+.scrub__played {
+  position: absolute; inset: 0 auto 0 0;
+  width: 0%;
+  background: linear-gradient(90deg, #5aa7ff, #7bd389); /* subtle theme colors */
+}
+
+/* Handle */
+.scrub__handle {
+  position: absolute; top: 50%;
+  left: 0%;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #2D4D80;
+  transform: translate(-50%, -50%);
+  box-shadow: none;
+  outline: none;
+  /* No hover/active/accent (consistent with your controls policy) */
+}
+.scrub__handle:hover,
+.scrub__handle:active,
+.scrub__handle:focus,
+.scrub__handle:focus-visible {
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Prevent accidental text selection while scrubbing */
+.scrub__track, .scrub__handle {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Optional: slightly enlarge handle hit area on touch devices */
+@media (pointer: coarse) {
+  .scrub__handle { width: 18px; height: 18px; }
+}
+
+/* (If you ever had native controls visible, hide them just in case) */
+audio::-webkit-media-controls { display: none !important; }
+
+audio::-webkit-media-controls { display: none !important; }
