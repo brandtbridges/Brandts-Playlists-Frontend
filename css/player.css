@@ -77,13 +77,14 @@ body{
 /* Cover image: always block (placeholder visible by default to prevent layout shift) */
 .art img#cover{
   display:block; width:100%; max-width:var(--media-width);
-  border-radius:12px; border:1px solid var(--border); background:#1a2030;
+  border-radius:12px; border:1px solid var(--border); background:transparent;
   transition: opacity .15s ease-in-out;
 }
 .art img#cover.is-loading{ opacity:.6; }
 
 .art img#cover.placeholder {
-  border-color: rgba(213,130,41,0.6); /* distinct color for default image */
+  border-color: rgba(213,130,41,0.5); /* distinct color for default image */
+  background:transparent;
 }
 
 /* Controls row: 320px centered, icons as backgrounds */
@@ -439,7 +440,7 @@ body{
 .scrub__played {
   position: absolute; inset: 0 auto 0 0;
   width: 0%;
-  background: linear-gradient(90deg, #5aa7ff, #7bd389); /* subtle theme colors */
+  background: linear-gradient(90deg, #d58229, #F2B71B); /* subtle theme colors */
 }
 
 /* Handle */
@@ -449,7 +450,7 @@ body{
   width: 14px; height: 14px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: #2D4D80;
+  background: #18345C;
   transform: translate(-50%, -50%);
   box-shadow: none;
   outline: none;

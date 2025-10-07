@@ -375,8 +375,9 @@ function drawRadial(ctx, data) {
   const { width, height } = ctx.canvas;
   fillBg(ctx);
   const cx = width/2, cy = height/2;
-  const radius = Math.min(cx, cy) * 1.33;
-  const bars = 96;
+  const radius = Math.min(cx, cy) * 1.25;
+  const bars = 64;  //96
+  data.length = 420;
   ctx.save();
   ctx.translate(cx, cy);
   for (let i=0;i<bars;i++){
