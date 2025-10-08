@@ -433,7 +433,7 @@ body{
 .scrub__buffer {
   position: absolute; inset: 0 auto 0 0;
   width: 0%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.15);
 }
 
 /* Played portion */
