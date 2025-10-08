@@ -332,8 +332,8 @@ body{
 .icon-btn.icon--shuffle-off[aria-pressed="true"],
 .icon-btn.icon--shuffle-on:active,
 .icon-btn.icon--shuffle-off:active,
-.icon-btn.icon--shuffle-on:focus,
-.icon-btn.icon--shuffle-off:focus,
+/*.icon-btn.icon--shuffle-on:focus,
+.icon-btn.icon--shuffle-off:focus, */
 .icon-btn.icon--shuffle-on:focus-visible,
 .icon-btn.icon--shuffle-off:focus-visible {
   border-color: #D58229 !important;
@@ -433,7 +433,7 @@ body{
 .scrub__buffer {
   position: absolute; inset: 0 auto 0 0;
   width: 0%;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.25);
 }
 
 /* Played portion */

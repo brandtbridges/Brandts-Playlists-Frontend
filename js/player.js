@@ -1,3 +1,7 @@
+// --- Debug switch (flip to false to mute quickly)
+const DEBUG = false;
+const D = (...args) => DEBUG && console.debug('[PlexPlayer]', ...args);
+
 /* ============================================
  * Plex Playlist Player (modular, readable)
  * ============================================
@@ -67,9 +71,6 @@ const $scrubPlayed = document.getElementById('scrubPlayed');
 const $scrubBuffer = document.getElementById('scrubBuffer');
 const $scrubHandle = document.getElementById('scrubHandle');
 
-// --- Debug switch (flip to false to mute quickly)
-const DEBUG = true;
-const D = (...args) => DEBUG && console.debug('[PlexPlayer]', ...args);
 
 // Decode audio ready/network states for readable logs
 function rs() {
@@ -848,17 +849,17 @@ async function prev() {
 function toggleShuffle(){
   const hadCursor = (cursor >= 0 && order[cursor] != null);
   const currentTrackIndex = hadCursor ? order[cursor] : null;
-  const turningOn = !shuffleOn;
 
-  shuffleOn = !shuffleOn;
-  setShuffleStateUI(shuffleOn);
+  shuffleOn = !shuffleOn;  
   rebuildOrder(currentTrackIndex);
 
-  if (turningOn && currentTrackIndex != null) {
+  if (shuffleOn && currentTrackIndex != null) {
     // After shuffling, move to the NEXT item in the shuffled order
     const nextPos = order.length > 1 ? 1 : 0;
+    setShuffleStateUI(shuffleOn);
     playByOrderPosition(nextPos);
   } else {
+    setShuffleStateUI(shuffleOn);
     // Turning shuffle OFF: keep playing current track; do not restart.
     if (currentTrackIndex != null) setActiveRowByTrackIndex(currentTrackIndex);
   }}
